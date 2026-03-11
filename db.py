@@ -21,10 +21,23 @@ def get_db():
 
 def search(search_term):
     conn = get_db()
-    cursor = conn.cursor(dictionary=True)
-    query = f"SELECT * FROM products WHERE product_name LIKE '%{search_term}%';"
+    cursor = conn.cursor(dictionary=True, buffered=True)
+    query = f"SELECT * FROM products WHERE name LIKE '%{search_term}%';"
     cursor.execute(query)
     results = cursor.fetchall()
     cursor.close()
     conn.close()
     return results
+
+def login(username, password):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True, buffered=True)
+
+    query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+    print (f"Generierte SQL-Query: {query=}")
+    cursor.execute(query)
+    user = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+    return user

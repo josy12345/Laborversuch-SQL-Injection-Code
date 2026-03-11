@@ -24,9 +24,24 @@ def search():
         products = db.search(search_query)
         return render_template('search.html', products=products, query=search_query)
 
-    return render_template('search.html', products=[], query=" ")
+    return render_template('search.html', products=[], query="")
 
-    
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username', '')
+        passwort = request.form.get('password', '')
+
+        user = db.login(username, passwort)
+
+        if user:
+            return render_template('login.html', success=True, user=user)
+        else:
+            return render_template('login.html', success=False, error="Falscher Benutzername oder Passwort.")
+
+
+    return render_template('login.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

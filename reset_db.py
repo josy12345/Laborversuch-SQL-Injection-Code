@@ -27,7 +27,7 @@ def reset_database():
 
         cursor.execute("""
         CREATE TABLE products(
-            di INT AUTO_INCREMENT PRIMARY KEY,
+            id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
             price DECIMAL(10, 2) NOT NULL,
             description TEXT
