@@ -7,15 +7,6 @@ app=Flask(__name__)
 def index():
     return render_template('willkommen.html')
 
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     username = request.form['username']
-#     password = request.form['password']
-#     if username == 'admin' and password == '1234':
-#         return render_template('willkommen.html', username=username)
-#     else:
-#         return render_template('login.html', fehler='Falscher Benutzername oder Passwort!')
-
 @app.route('/search', methods=['GET'])
 def search():
     search_query = request.args.get('q', '')
@@ -41,6 +32,18 @@ def login():
 
 
     return render_template('login.html')
+
+@app.route('/checkout', methods= ['POST'])
+def checkout():
+    name = request.form.get('name')
+    notes = request.form.get('notes', '')
+
+    if name:
+        success = db.order(name,notes)
+        if success:
+            return f"<h3>Bestellung erfolgreich!</h3><p>Du hast '{name}' bestellt.</p><a href='/search'>Zurück zum Shop</a>"
+    return "FEHLER BEI BESTELLUNG."
+
 
 
 if __name__ == '__main__':

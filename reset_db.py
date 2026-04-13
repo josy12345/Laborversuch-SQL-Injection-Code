@@ -64,6 +64,16 @@ def reset_database():
         conn.commit()
         print("Datenbank zurückgesetzt! Es sind 3 Produkte und 3 Nutzer angelegt.")
 
+        cursor.execute("""
+        CREATE TABLE orders ( 
+             id INT AUTO_INCREMENT PRIMARY KEY,
+             name VARCHAR(255) NOT NULL,
+             price DECIMAL(10, 2) NOT NULL,
+             user_id INT NOT NULL,
+             notes TEXT
+        );
+        """)
+
     except mysql.connector.Error as err:
         print(f"Fehler beim Zurücksetzen der Datenbank: {err}")
 

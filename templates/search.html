@@ -20,5 +20,11 @@
             {% endfor %}
         </ul>
     {% endif %}
+    <form action="/checkout" method="POST" style="margin-top: 5px;">
+        <input type="hidden" name="name" value="{{name}}">
+        <label for="notes">Anmerkung zur Bestellung:</label><br>
+        <input type="text" name="notes" placeholder="z.B. Bitte schnell liefern"><br>
+        <button type="submit">Jetzt kostenpflichtig kaufen</button>
+    </form>
 </body>
 </html>
