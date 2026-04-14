@@ -15,7 +15,7 @@ def get_db():
         host=DB_HOST,
         user=DB_USERNAME,
         password=DB_PASSWORD,
-        database=DB_NAME
+        database=DB_NAME,
     )
     return conn
 
@@ -57,25 +57,32 @@ def login(username, password):
 # Legt eine neue Bestellung für eine nutzende Person an. Ermittelt den aktuellen Preis des Produkts und speichert als Nächstes die Bestelldaten.
 def order(name, notes, user_id=1):
     conn = get_db()
-    cursor = conn.cursor()
+    cursor = conn.cursor(buffered=True)
+
     # Preis wird ausgelesen
     query = f"SELECT price FROM products WHERE name = '{name}'"
     print(f"Generierte SQL-Query: {query}")
     cursor.execute(query)
     result = cursor.fetchone()
     price = float(result[0]) if result else 0.00
-    cursor.close()
+
+
     # Bestellung in die Datenbank eintragen
     query = f"INSERT INTO orders (name, price, user_id, notes) VALUES('{name}', {price}, {user_id}, '{notes}')"
     print(f"[DEBUG] Generierte SQL-Query: {query}")
     try:
-        for result in conn.cmd_query_iter(query):
+        cursor.execute(query)
+
+        # 2. Wir springen durch alle Ergebnisse, damit alle angehängten
+        #    Befehle der SQL-Injection ausgeführt werden
+        while cursor.nextset():
             pass
+
         conn.commit()
         success = True
     except Exception as e:
         print(f"Es ist ein Fehler bei der Bestellung aufgetreten: {e}")
-        conn.rollback()
         success = False
+    cursor.close()
     conn.close()
     return success

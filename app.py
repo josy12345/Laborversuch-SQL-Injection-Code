@@ -7,15 +7,19 @@ app=Flask(__name__)
 def index():
     return render_template('willkommen.html')
 
+
 @app.route('/search', methods=['GET'])
 def search():
     search_query = request.args.get('q', '')
 
     if search_query:
+        # Wenn gesucht wird, nutze die Suchfunktion (hier ist die SQL-Injection möglich)
         products = db.search(search_query)
-        return render_template('search.html', products=products, query=search_query)
+    else:
+        # Wenn nichts gesucht wird, zeige alle Produkte an
+        products = db.get_all_products()
 
-    return render_template('search.html', products=[], query="")
+    return render_template('search.html', products=products, query=search_query)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

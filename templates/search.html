@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta charset="UTF-8">
     <title>Produktsuche</title>
 </head>
 <body>
@@ -12,19 +13,42 @@
 
     {% if query %}
         <h2>Ergebnisse für: {{ query }}</h2>
-        <ul>
-            {% for product in products %}
-                <li>{{ product.name }} - {{ product.price }} €</li>
-            {% else %}
-                <li>Keine Produkte gefunden.</li>
-            {% endfor %}
-        </ul>
+    {% else %}
+        <h2>Alle Produkte</h2>
     {% endif %}
-    <form action="/checkout" method="POST" style="margin-top: 5px;">
-        <input type="hidden" name="name" value="{{name}}">
-        <label for="notes">Anmerkung zur Bestellung:</label><br>
-        <input type="text" name="notes" placeholder="z.B. Bitte schnell liefern"><br>
-        <button type="submit">Jetzt kostenpflichtig kaufen</button>
-    </form>
+
+    {% if products %}
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Preis (€)</th>
+                <th>Beschreibung</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
+                <!-- Wichtig für SQL-Injection: Falls die Beschreibung mal fehlt, zeige nichts an -->
+                <td>{{ product.description }}</td>
+                <td>
+                    <a href="/order?name={{ product.name }}">
+                        <button type="button">Zur Bestellung hinzufügen</button>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>Keine Produkte gefunden.</p>
+    {% endif %}
+
+    <br>
+    <!-- Falls Nutzer sich ausloggen wollen -->
+    <a href="/login">Zurück zum Login</a>
 </body>
 </html>
