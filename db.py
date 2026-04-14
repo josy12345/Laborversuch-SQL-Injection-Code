@@ -48,7 +48,7 @@ def order(name, notes,user_id=1):
     # Preis wird ausgelesen
     query = f"SELECT price FROM products WHERE name = '{name}'"
     print(f"Generierte SQL-Query: {query}")
-    cursor.execute()
+    cursor.execute(query)
     result = cursor.fetchone()
     price = result[0] if result else 0.00
     # Bestellung in die Datenbank eintragen
