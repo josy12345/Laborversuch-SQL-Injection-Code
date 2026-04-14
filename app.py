@@ -22,16 +22,18 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username', '')
         passwort = request.form.get('password', '')
-
         user = db.login(username, passwort)
-
         if user:
-            return render_template('login.html', success=True, user=user)
+            products = db.get_all_products()
+            return render_template('login.html', success=True, user=user, products=products)
         else:
             return render_template('login.html', success=False, error="Falscher Benutzername oder Passwort.")
-
-
     return render_template('login.html')
+
+@app.route('/order', methods=['GET'])
+def order_page():
+    name = request.args.get('name', '')
+    return render_template('order.html', name=name)
 
 @app.route('/checkout', methods= ['POST'])
 def checkout():

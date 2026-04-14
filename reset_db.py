@@ -24,6 +24,7 @@ def reset_database():
 
         cursor.execute("DROP TABLE IF EXISTS products;")
         cursor.execute("DROP TABLE IF EXISTS users;")
+        cursor.execute("DROP TABLE IF EXISTS orders;")
 
         cursor.execute("""
         CREATE TABLE products(

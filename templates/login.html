@@ -1,34 +1,63 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <title>Elektronik Shop – Login</title>
 </head>
 <body>
-    <h1>Login</h1>
 
     {% if success %}
-        <h2 style="color: green;">Willkommen zurück, {{user.username}}!</h2>
-        <p>Deine Rolle im System: <strong>{{user.role}}</strong></p>
-        <br>
-        <a href="/login">Logout</a>
-    {% else %}
-        {% if error %}
-            <p style = "color: red;">{{error}}</p>
+        <p>Eingeloggt als <strong>{{ user.username }}</strong></p>
+
+        <h1>Produktsuche</h1>
+        <form method="GET" action="/search">
+            <input type="text" name="q" placeholder="Produkt suchen...">
+            <button type="submit">Suchen</button>
+        </form>
+
+        <h2>Alle Produkte</h2>
+        {% if products %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Preis (€)</th>
+                    <th>Beschreibung</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.description }}</td>
+                    <td>
+                        <a href="/order?name={{ product.name }}">
+                            <button type="button">Zur Bestellung hinzufügen</button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>Keine Produkte gefunden.</p>
         {% endif %}
 
-        <form action="/login" method="POST">
-            <label for="username">Benutzername:</label><br>
-            <input type="text" id="username" name="username"><br><br>
-
-            <label for="password">Passwort:</label><br>
-            <input type="password" id="password" name="password"><br><br>
-
+    {% else %}
+        <h1>Einloggen</h1>
+        {% if success == False and error %}
+            <p>{{ error }}</p>
+        {% endif %}
+        <form method="POST" action="/login">
+            <label for="username">Benutzername</label><br>
+            <input type="text" id="username" name="username" placeholder="Benutzername"><br><br>
+            <label for="password">Passwort</label><br>
+            <input type="password" id="password" name="password" placeholder="Passwort"><br><br>
             <button type="submit">Einloggen</button>
         </form>
     {% endif %}
-
-    <br>
-    <a href="/">Zurück zur Startseite</a>
 
 </body>
 </html>

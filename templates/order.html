@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Elektronik Shop – Bestellung</title>
+</head>
+<body>
+
+    <h1>Bestellung</h1>
+    <p>Du bestellst: <strong>{{ name }}</strong></p>
+
+    <form method="POST" action="/checkout">
+        <input type="hidden" name="name" value="{{ name }}">
+        <label for="notes">Anmerkung</label><br>
+        <textarea id="notes" name="notes" rows="4" cols="40" placeholder="Anmerkung zur Bestellung..."></textarea><br><br>
+        <button type="submit">Jetzt bestellen</button>
+    </form>
+
+    <br>
+    <a href="/login">Zurück zum Shop</a>
+
+</body>
