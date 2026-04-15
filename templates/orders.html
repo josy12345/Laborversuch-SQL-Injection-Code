@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Bestellübersicht</title>
+</head>
+<body>
+    <h1>Bestellungen
+        {% if role == 'admin' %}
+            (Admin-Ansicht: Alles)
+        {% else %}
+            (Meine Bestellungen)
+        {% endif %}
+    </h1>
+
+    {% if orders %}
+    <table>
+        <thead>
+            <tr>
+                <th>Bestell-ID</th>
+                <th>Käufer</th>
+                <th>Produkt</th>
+                <th>Preis (€)</th>
+                <th>Anmerkungen</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.username }}</td>
+                <td>{{ order.product_name }}</td>
+                <td>{{ order.price }}</td>
+                <td>{{ order.notes }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>Keine Bestellungen gefunden oder Tabelle existiert nicht (mehr).</p>
+    {% endif %}
+
+    <br>
+    <a href="/search">Zurück zum Shop</a>
+</body>
+</html>

@@ -86,3 +86,44 @@ def order(name, notes, user_id=1):
     cursor.close()
     conn.close()
     return success
+
+
+# Liest alle Bestellungen aus und verknüpft sie mit den Benutzernamen
+def get_all_orders():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True, buffered=True)
+    query = """SELECT orders.id, users.username, orders.name AS product_name, orders.price, orders.notes FROM orders
+                JOIN users ON orders.user_id = users.id"""
+    try:
+        cursor.execute(query)
+        results = cursor.fetchall()
+    except Exception as e:
+        print(f"Fehler beim Laden der Bestellungen (vielleicht Tabelle gelöscht?): {e}")
+        results = []
+
+    cursor.close()
+    conn.close()
+    return results
+
+
+# Liest nur die Bestellungen des aktuell eingeloggten Nutzers aus
+def get_user_orders(user_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True, buffered=True)
+    query = f"""
+        SELECT orders.id, users.username, orders.name AS product_name, 
+               orders.price, orders.notes 
+        FROM orders 
+        JOIN users ON orders.user_id = users.id
+        WHERE orders.user_id = {user_id}
+    """
+    try:
+        cursor.execute(query)
+        results = cursor.fetchall()
+    except Exception as e:
+        print(f"Fehler beim Laden der User-Bestellungen: {e}")
+        results = []
+
+    cursor.close()
+    conn.close()
+    return results
