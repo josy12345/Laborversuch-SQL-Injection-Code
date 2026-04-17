@@ -65,12 +65,10 @@ def view_orders():
 def checkout():
     name = request.form.get('name')
     notes = request.form.get('notes', '')
-    user_id = session.get('user_id', 1)  # Holt echte ID (oder 1 als Notfall-Fallback)
-    if name:
-        success = db.order(name,notes,user_id)
-        if success:
-            return f"<h3>Bestellung erfolgreich!</h3><p>Du hast '{name}' bestellt.</p><a href='/search'>Zurück zum Shop</a>"
-    return "Fehler bei der Bestellung."
+    user_id = session.get('user_id', 1)
+    
+    db.order(name,notes,user_id)
+    return f"<h3>Bestellung erfolgreich!</h3><p>Du hast '{name}' bestellt.</p><a href='/search'>Zurück zum Shop</a>"
 
 
 

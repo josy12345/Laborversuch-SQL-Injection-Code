@@ -70,22 +70,18 @@ def order(name, notes, user_id=1):
     # Bestellung in die Datenbank eintragen
     query = f"INSERT INTO orders (name, price, user_id, notes) VALUES('{name}', {price}, {user_id}, '{notes}')"
     print(f"[DEBUG] Generierte SQL-Query: {query}")
-    try:
-        cursor.execute(query)
+    
+    cursor.execute(query)
 
         # 2. Wir springen durch alle Ergebnisse, damit alle angehängten
         #    Befehle der SQL-Injection ausgeführt werden
-        while cursor.nextset():
-            pass
+    while cursor.nextset():
+        pass
 
-        conn.commit()
-        success = True
-    except Exception as e:
-        print(f"Es ist ein Fehler bei der Bestellung aufgetreten: {e}")
-        success = False
+    conn.commit()
     cursor.close()
     conn.close()
-    return success
+    return True
 
 
 # Liest alle Bestellungen aus und verknüpft sie mit den Benutzernamen
@@ -94,13 +90,9 @@ def get_all_orders():
     cursor = conn.cursor(dictionary=True, buffered=True)
     query = """SELECT orders.id, users.username, orders.name AS product_name, orders.price, orders.notes FROM orders
                 JOIN users ON orders.user_id = users.id"""
-    try:
-        cursor.execute(query)
-        results = cursor.fetchall()
-    except Exception as e:
-        print(f"Fehler beim Laden der Bestellungen (vielleicht Tabelle gelöscht?): {e}")
-        results = []
-
+    
+    cursor.execute(query)
+    results = cursor.fetchall()
     cursor.close()
     conn.close()
     return results
@@ -117,13 +109,9 @@ def get_user_orders(user_id):
         JOIN users ON orders.user_id = users.id
         WHERE orders.user_id = {user_id}
     """
-    try:
-        cursor.execute(query)
-        results = cursor.fetchall()
-    except Exception as e:
-        print(f"Fehler beim Laden der User-Bestellungen: {e}")
-        results = []
-
+    
+    cursor.execute(query)
+    results = cursor.fetchall()
     cursor.close()
     conn.close()
     return results
