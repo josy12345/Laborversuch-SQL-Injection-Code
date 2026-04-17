@@ -72,14 +72,14 @@ def reset_database():
 
         users_sql = "INSERT INTO users (username, password, role) VALUES (%s, %s, %s)"
         users_data = [
-            ('admin', 'super_geheimes_admin_passwort_123', 'admin'),
-            ('josy', 'h4ckth3pl4n3t!', 'admin'),
             ('max_mustermann', 'passwort1', 'user'),
             ('maria_musterfrau', 'passwort2', 'user'),
             ('student_01', 'klausur2026', 'user'),
             ('student_02', 'sommersemester!', 'user'),
+            ('admin', 'super_geheimes_admin_passwort_123', 'admin'),
             ('dozent_schmidt', 'K0mpl3x3sP4ssw0rt!', 'user'),
             ('gast_account', 'gast1234', 'user'),
+            ('josy', 'h4ckth3pl4n3t!', 'admin'),
             ('tutor_informatik', 'tut_pw_99', 'user'),
             ('praktikant_01', 'praxis2026', 'user')
         ]
