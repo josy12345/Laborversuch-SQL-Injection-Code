@@ -14,7 +14,6 @@ def search():
     search_query = request.args.get('q', '')
 
     if search_query:
-        # Wenn gesucht wird, nutze die Suchfunktion
         products = db.search(search_query)
     else:
         # Wenn nichts gesucht wird, zeige alle Produkte an
@@ -29,7 +28,7 @@ def login():
         passwort = request.form.get('password', '')
         user = db.login(username, passwort)
         if user:
-            # HIER: Nutzerdaten in der Session speichern
+            # Nutzerdaten in der Session speichern
             session['user_id'] = user['id']
             session['username'] = user['username']
             session['role'] = user['role']
@@ -53,7 +52,6 @@ def view_orders():
 
     role = session.get('role')
     user_id = session.get('user_id')
-    # Logik für die Rollenverteilung
     if role == 'admin':
         orders = db.get_all_orders()
     else:

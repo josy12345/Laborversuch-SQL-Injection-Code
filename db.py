@@ -73,8 +73,7 @@ def order(name, notes, user_id=1):
     
     cursor.execute(query)
 
-        # 2. Wir springen durch alle Ergebnisse, damit alle angehängten
-        #    Befehle der SQL-Injection ausgeführt werden
+    # Es wird durch alle Ergebnisse gesprungen
     while cursor.nextset():
         pass
 
