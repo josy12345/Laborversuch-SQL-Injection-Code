@@ -23,9 +23,10 @@ def get_db():
 def search(search_term):
     conn = get_db()
     cursor = conn.cursor(dictionary=True, buffered=True)
-    query = f"SELECT * FROM products WHERE name LIKE '%{search_term}%';"
+    #query = f"SELECT * FROM products WHERE name LIKE '%{search_term}%';"
+    query = "SELECT * FROM products WHERE name LIKE %s"
     print(f"[DEBUG] Generierte SQL-Query: {query}")
-    cursor.execute(query)
+    cursor.execute(query, ('%' + search_term + '%',))
     results = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -60,18 +61,19 @@ def order(name, notes, user_id=1):
     cursor = conn.cursor(buffered=True)
 
     # Preis wird ausgelesen
-    query = f"SELECT price FROM products WHERE name = '{name}'"
+    #query = f"SELECT price FROM products WHERE name = '{name}'"
+    query = "SELECT price FROM products WHERE name = %s"
     print(f"Generierte SQL-Query: {query}")
-    cursor.execute(query)
+    cursor.execute(query, (name,))
     result = cursor.fetchone()
     price = float(result[0]) if result else 0.00
 
 
     # Bestellung in die Datenbank eintragen
-    query = f"INSERT INTO orders (name, price, user_id, notes) VALUES('{name}', {price}, {user_id}, '{notes}')"
+    query = f"INSERT INTO orders (name, price, user_id, notes) VALUES(%s, %s, %s, %s)"
     print(f"[DEBUG] Generierte SQL-Query: {query}")
     
-    cursor.execute(query)
+    cursor.execute(query, (name, price, user_id, notes))
 
     # Es wird durch alle Ergebnisse gesprungen
     while cursor.nextset():
