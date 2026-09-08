@@ -23,7 +23,7 @@ services:
       - "3306:3306"
     volumes:
       - db-data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/reset_db.py
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-plabpassword"]
       interval: 5s
