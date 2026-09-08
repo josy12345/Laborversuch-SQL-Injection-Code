@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   web:
     build: .
@@ -10,6 +8,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      db_init:
+        condition: service_completed_successfully
     networks:
       - lab-network
 
@@ -23,15 +23,26 @@ services:
       - "3306:3306"
     volumes:
       - db-data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/reset_db.py
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-plabpassword"]
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u -root -p\""$$MYSQL_ROOT_PASSWORD\" --silent"]
       interval: 5s
       timeout: 5s
       retries: 10
-      start_period: 30s
+      start_period: 40s
     networks:
       - lab-network
+
+  db-init:
+    build: .
+    command: ["python3", "reset_db.py"]
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+    networks:
+      - lab_network
 
 volumes:
   db-data:
