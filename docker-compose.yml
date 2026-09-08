@@ -17,6 +17,7 @@ services:
     image: mysql:8.0
     restart: always
     environment:
+      MYSQL_ROOT_PASSWORD: labor
       MYSQL_DATABASE: shop
       MYSQL_USER: user
       MYSQL_PASSWORD: labor
@@ -27,7 +28,7 @@ services:
     healthcheck:
       test:
         - CMD-SHELL
-        - 'mysqladmin ping -h 127.0.0.1 -u -root -p"$$MYSQL_PASSWORD" --silent'
+        - 'mysqladmin ping -h 127.0.0.1 -u -root -p"$$MYSQL_ROOT_PASSWORD" --silent'
       interval: 5s
       timeout: 5s
       retries: 10
